@@ -11,6 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 20151008201917) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "posts", force: :cascade do |t|
+    t.integer "comment_id", index: {name: "fk__posts_comment_id"} # foreign key references "comments" (below)
+  end
+
+  create_table "comments", force: :cascade do |t|
+    t.integer "post_id", index: {name: "fk__comments_post_id"}, foreign_key: {references: "posts", name: "fk_comments_post_id", on_update: :no_action, on_delete: :no_action}
+  end
+  add_foreign_key "posts", "comments", column: "comment_id", name: "fk_posts_comment_id", on_update: :no_action, on_delete: :no_action
 
 end
